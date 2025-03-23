@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import Nav from '../components/Nav.vue';
+import Nav from '../../components/Nav.vue';
 
 </script>
 <template>
@@ -8,7 +8,7 @@ import Nav from '../components/Nav.vue';
         <Nav></Nav>
         <!-- 右侧 内容栏 -->
         <div class="content-container">
-           首页
+            藏品管理1111
         </div>
     </div>
 </template>

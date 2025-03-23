@@ -3,17 +3,17 @@ import Nav from '../components/Nav.vue';
 
 </script>
 <template>
-    <div class="collections-container">
+    <div class="vision-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>
         <!-- 右侧 内容栏 -->
         <div class="content-container">
-           首页
+            数据大屏
         </div>
     </div>
 </template>
 <style lang='scss' scoped>
-.collections-container {
+.vision-container {
     display: flex;
     width: 100vw;
     height: 100vh;

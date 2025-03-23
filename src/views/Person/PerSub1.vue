@@ -1,19 +1,20 @@
 <script lang='ts' setup>
-import Nav from '../components/Nav.vue';
+import Nav from '../../components/Nav.vue';
+
 
 </script>
 <template>
-    <div class="collections-container">
+    <div class="person-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>
         <!-- 右侧 内容栏 -->
         <div class="content-container">
-           首页
+            人员管理1111
         </div>
     </div>
 </template>
 <style lang='scss' scoped>
-.collections-container {
+.person-container {
     display: flex;
     width: 100vw;
     height: 100vh;
