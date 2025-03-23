@@ -21,12 +21,12 @@ const items = [
         children: [
             {
                 key: '2-1',
-                label: '子导航1',
+                label: '藏品分类',
                 onClick: () => navigateTo('/collections/sub1'),
             },
             {
                 key: '2-2',
-                label: '子导航2',
+                label: '藏品录入',
                 onClick: () => navigateTo('/collections/sub2'),
             },
         ],
