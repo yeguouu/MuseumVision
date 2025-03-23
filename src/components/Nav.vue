@@ -37,12 +37,12 @@ const items = [
         children: [
             {
                 key: '3-1',
-                label: '子导航1',
+                label: '人员列表',
                 onClick: () => navigateTo('/person/sub1'),
             },
             {
                 key: '3-2',
-                label: '子导航2',
+                label: '人员录入',
                 onClick: () => navigateTo('/person/sub2'),
             },
         ],
@@ -53,12 +53,12 @@ const items = [
         children: [
             {
                 key: '4-1',
-                label: '子导航1',
+                label: '账号密码',
                 onClick: () => navigateTo('/set/sub1'),
             },
             {
                 key: '4-2',
-                label: '子导航2',
+                label: '个性化',
                 onClick: () => navigateTo('/set/sub2'),
             },
         ],
