@@ -1,7 +1,15 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-})
+    plugins: [vue()],
+    server: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3000', // 目标服务器地址
+                changeOrigin: true, // 是否改变请求源
+                rewrite: (path) => path.replace(/^\/api/, '') // 重写路径
+            }
+        }
+    }
+});
