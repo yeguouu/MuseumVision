@@ -124,7 +124,7 @@ const toggleRow = (index: number) => {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
-        gap: 20px;
+        gap: 10px;
 
         .item {
             width: 300px;
@@ -164,8 +164,8 @@ const toggleRow = (index: number) => {
     }
 }
 .ant-modal-body img {
-    width: 470px; // 固定宽度
-    height: 470px; // 固定高度
+    width: 460px; // 固定宽度
+    height: 460px; // 固定高度
     object-fit: cover; // 保持图片比例并裁剪
 }
 </style>
