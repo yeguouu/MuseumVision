@@ -29,6 +29,11 @@ const items = [
                 label: '藏品录入',
                 onClick: () => navigateTo('/collections/sub2'),
             },
+            {
+                key: '2-3',
+                label: '藏品',
+                onClick: () => navigateTo('/collections/sub3'),
+            },
         ],
     },
     {

@@ -7,9 +7,9 @@ export default defineConfig({
         port: 5176,
         strictPort: true,
         proxy: {
-            // 例如，将 /api 路径代理到 http://localhost:3000
+            // 例如，将 /api 路径代理到 http://localhost:3003
             '/api': {
-                target: 'http://localhost:3000',
+                target: 'http://localhost:3004',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, '')
             }

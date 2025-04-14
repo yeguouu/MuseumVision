@@ -3,17 +3,17 @@ import Nav from '../../components/Nav.vue';
 import { ref } from 'vue';
 import Col1 from '../../assets/col/col1.png'
 
-fetch('/api/users', {
-  method: 'GET',
-})
-.then(response => {
-  if (!response.ok) {
-    throw new Error('Network response was not ok ' + response.statusText);
-  }
-  return response.text();
-})
-.then(data => console.log(data))
-.catch(error => console.error('There was a problem with the fetch operation:', error));
+// fetch('/api/cols', {
+//   method: 'GET',
+// })
+// .then(response => {
+//   if (!response.ok) {
+//     throw new Error('not ok ' + response.statusText);
+//   }
+//   return response.text();
+// })
+// .then(data => console.log(data))
+// .catch(error => console.error('problem', error));
 
 interface Artifact {
     id: number;

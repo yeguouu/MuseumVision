@@ -33,6 +33,25 @@ const routes: Array<any> = [
         component: () => import("../views/Collections/ColSub2.vue"),
         meta: { requiresAuth: true },
       },
+      {
+        path: "sub3",
+        name: "collectionsSub3",
+        component: () => import("../views/Collections/ColSub3.vue"),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "sub3/:era",
+        name: "eraArtifacts",
+        component: () => import("../views/Collections/EraArtifacts.vue"),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "sub3/:category",
+        name: "categoryArtifacts",
+        component: () => import("../views/Collections/CategoryArtifacts.vue"),
+        meta: { requiresAuth: true },
+      },
+
     ],
   },
   {
