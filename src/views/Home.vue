@@ -1,8 +1,11 @@
 <script lang='ts' setup>
 import Nav from '../components/Nav.vue';
 import Search from '../components/Search.vue';
+import Header from '../components/Header.vue';
 </script>
 <template>
+    <!-- 上方标题 -->
+    <Header></Header>
     <div class="collections-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>
