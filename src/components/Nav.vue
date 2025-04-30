@@ -54,16 +54,16 @@ const items = [
     },
     {
         key: '4',
-        label: '设置',
+        label: '展区分类',
         children: [
             {
                 key: '4-1',
-                label: '账号密码',
+                label: '展区一',
                 onClick: () => navigateTo('/set/sub1'),
             },
             {
                 key: '4-2',
-                label: '个性化',
+                label: '展区二',
                 onClick: () => navigateTo('/set/sub2'),
             },
         ],

@@ -1,36 +1,54 @@
 <script lang='ts' setup>
 import Nav from '../../components/Nav.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { message } from 'ant-design-vue';
-import router from '../../router';
 import Header from '../../components/Header.vue';
+import Col1 from '../../assets/col/col1.png'; // 引入统一的图片
 
-// 假设从localStorage获取当前用户的账号和密码
-const currentUsername = ref(localStorage.getItem('username') || '');
-const currentPassword = ref(localStorage.getItem('password') || '');
+// 新增：定义文物数据结构
+interface Artifact {
+    id: number;
+    name: string;
+    image: string;
+    era: string;
+    category: string;
+    quantity: number;
+    storageDate: string;
+    exhibitionArea: string;
+    description: string;
+}
 
-const newUsername = ref(currentUsername.value);
-const newPassword = ref(currentPassword.value);
-const confirmPassword = ref(''); // 新增：确认密码
+// 新增：当前选中的文物
+const selectedArtifact = ref<Artifact | null>(null);
+const artifacts = ref<Artifact[]>([]);
 
-const updateCredentials = () => {
-    if (!newUsername.value || !newPassword.value || !confirmPassword.value) {
-        message.error('请填写所有字段');
-        return;
-    }
-    if (newPassword.value !== confirmPassword.value) { // 新增：验证两次输入的密码是否一致
-        message.error('两次输入的密码不一致');
-        return;
-    }
-    // 更新localStorage中的账号和密码
-    localStorage.setItem('username', newUsername.value);
-    localStorage.setItem('password', newPassword.value);
-    message.success('账号密码修改成功');
+onMounted(() => {
+    fetch('/api/cols', {
+        method: 'GET',
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 过滤出展区一的文物
+            const filteredArtifacts = data.filter((artifact: Artifact) => artifact.exhibitionArea === '展区一');
+            // 为每个文物添加统一的图片
+            artifacts.value = filteredArtifacts.map((item: any) => ({
+                ...item,
+                image: Col1,
+            }));
+        })
+        .catch(error => console.error('problem', error));
+});
 
-    // 清除登录状态
-    localStorage.removeItem('authToken');
-    // 重定向到登录页面
-    router.push('/login');
+// 新增：显示详细信息的模态框
+const isModalVisible = ref(false);
+const showModal = (artifact: Artifact) => {
+    selectedArtifact.value = artifact;
+    isModalVisible.value = true;
 };
 </script>
 <template>
@@ -40,21 +58,25 @@ const updateCredentials = () => {
         <Nav></Nav>
         <!-- 右侧 内容栏 -->
         <div class="content-container">
-            <form @submit.prevent="updateCredentials">
-                <div>
-                    <label for="username">账号:</label>
-                    <input type="text" id="username" v-model="newUsername" required />
+            <h2>展区一的文物</h2>
+            <div class="artifacts-grid">
+                <div v-for="artifact in artifacts" :key="artifact.id" class="artifact-item"
+                    @click="showModal(artifact)">
+                    <img :src="artifact.image" alt="artifact image" />
+                    <p>{{ artifact.name }}</p>
                 </div>
-                <div>
-                    <label for="password">密码:</label>
-                    <input type="password" id="password" v-model="newPassword" required />
+            </div>
+            <a-modal v-model:visible="isModalVisible" title="文物信息" :footer="null" @cancel="isModalVisible = false">
+                <div v-if="selectedArtifact">
+                    <img :src="selectedArtifact.image" alt="artifact image" />
+                    <p><strong>名称：</strong>{{ selectedArtifact.name }}</p>
+                    <p><strong>朝代：</strong>{{ selectedArtifact.era }}</p>
+                    <p><strong>品类：</strong>{{ selectedArtifact.category }}</p>
+                    <p><strong>数量：</strong>{{ selectedArtifact.quantity }}</p>
+                    <p><strong>入库时间：</strong>{{ selectedArtifact.storageDate }}</p>
+                    <p><strong>描述：</strong>{{ selectedArtifact.description }}</p>
                 </div>
-                <div>
-                    <label for="confirmPassword">确认密码:</label> <!-- 新增：确认密码输入框 -->
-                    <input type="password" id="confirmPassword" v-model="confirmPassword" required />
-                </div>
-                <button type="submit">修改账号密码</button>
-            </form>
+            </a-modal>
         </div>
     </div>
 </template>
@@ -70,40 +92,47 @@ const updateCredentials = () => {
     height: 100%;
     background-color: #f0f0f0;
     padding: 20px;
-}
-
-form {
-    padding: 30px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+}
 
-    div {
-        display: flex;
-        flex-direction: column;
+.artifacts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
 
-        label {
-            margin-bottom: 5px;
-        }
+.artifact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
 
-        input, textarea {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            padding: 10px;
-            background-color: #1890ff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-
-            &:hover {
-                background-color: #40a9ff;
-            }
-        }
+    img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+
+    p {
+        margin-top: 10px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    &:hover {
+        transform: translateY(-5px);
+    }
+}
+
+.ant-modal-body img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    margin-bottom: 15px;
 }
 </style>
