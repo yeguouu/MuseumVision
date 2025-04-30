@@ -2,7 +2,7 @@
 import Nav from '../components/Nav.vue';
 import * as echarts from 'echarts';
 import { onMounted, ref } from 'vue';
-
+import Header from '../components/Header.vue';
 // 假设从某个API获取文物数据
 const artifacts = ref([
     { id: 1, image: '', title: '文物1', description: '这是文物1的描述', period: '2020', category: '绘画', status: '展出中', exhibitionArea: '展厅1' },
@@ -107,6 +107,7 @@ onMounted(() => {
 });
 </script>
 <template>
+    <Header></Header>
     <div class="vision-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>

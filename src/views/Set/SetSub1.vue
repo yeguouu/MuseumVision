@@ -3,6 +3,7 @@ import Nav from '../../components/Nav.vue';
 import { ref } from 'vue';
 import { message } from 'ant-design-vue';
 import router from '../../router';
+import Header from '../../components/Header.vue';
 
 // 假设从localStorage获取当前用户的账号和密码
 const currentUsername = ref(localStorage.getItem('username') || '');
@@ -33,6 +34,7 @@ const updateCredentials = () => {
 };
 </script>
 <template>
+    <Header></Header>
     <div class="set-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>

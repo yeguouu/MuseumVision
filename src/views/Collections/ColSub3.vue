@@ -3,6 +3,7 @@ import Nav from '../../components/Nav.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Col1 from '../../assets/col/col1.png';
+import Header from '../../components/Header.vue';
 
 interface Artifact {
     id: number;
@@ -85,6 +86,7 @@ const showArtifactsForCategory = () => {
 };
 </script>
 <template>
+    <Header></Header>
     <div class="collections-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>

@@ -3,6 +3,7 @@ import Nav from '../../components/Nav.vue';
 import { ref } from 'vue';
 import { message } from 'ant-design-vue';
 import dayjs from 'dayjs';
+import Header from '../../components/Header.vue';
 
 // 定义人员数据结构
 interface Person {
@@ -63,6 +64,7 @@ const assignRole = (role: string) => {
 
 </script>
 <template>
+    <Header></Header>
     <div class="person-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>

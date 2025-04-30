@@ -2,6 +2,7 @@
 import Nav from '../../components/Nav.vue';
 import { ref } from 'vue';
 import { message } from 'ant-design-vue';
+import Header from '../../components/Header.vue';
 
 // 定义人员数据结构
 interface Person {
@@ -61,6 +62,7 @@ const columns = [
 ];
 </script>
 <template>
+    <Header></Header>
     <div class="person-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>

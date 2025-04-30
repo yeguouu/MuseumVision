@@ -2,6 +2,7 @@
 import Nav from '../../components/Nav.vue';
 import { ref } from 'vue';
 import Col1 from '../../assets/col/col1.png'
+import Header from '../../components/Header.vue';
 
 // fetch('/api/cols', {
 //   method: 'GET',
@@ -61,6 +62,7 @@ const toggleRow = (index: number) => {
 };
 </script>
 <template>
+    <Header></Header>
     <div class="collections-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>

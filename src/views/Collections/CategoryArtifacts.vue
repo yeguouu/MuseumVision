@@ -1,4 +1,5 @@
 <template>
+  <Header></Header>
   <div class="era-artifacts-container">
     <!-- 左侧 导航栏 -->
     <Nav></Nav>
@@ -29,6 +30,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Nav from '../../components/Nav.vue'; // 确保引入 Nav 组件
 import Col1 from '../../assets/col/col1.png';
+import Header from '../../components/Header.vue';
 
 interface Artifact {
   id: number;

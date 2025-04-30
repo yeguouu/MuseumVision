@@ -1,8 +1,10 @@
 <script lang='ts' setup>
 import Nav from '../../components/Nav.vue';
+import Header from '../../components/Header.vue';
 
 </script>
 <template>
+    <Header></Header>
     <div class="set-container">
         <!-- 左侧 导航栏 -->
         <Nav></Nav>
