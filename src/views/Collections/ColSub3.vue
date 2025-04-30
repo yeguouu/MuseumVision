@@ -39,6 +39,7 @@ onMounted(() => {
             image: Col1, // 统一使用前端图片
         }));
         categorizeArtifacts();
+        console.log('成功', data);
     })
     .catch(error => console.error('problem', error));
 });

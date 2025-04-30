@@ -104,10 +104,10 @@ const handleFileChange = (event: Event) => {
                 <div>
                     <label for="era">时期朝代:</label>
                     <select id="era" v-model="newArtifact.era" required>
-                        <option value="汉">汉</option>
-                        <option value="唐">唐</option>
-                        <option value="宋">宋</option>
-                        <option value="明">明</option>
+                        <option value="汉">汉代</option>
+                        <option value="唐">唐代</option>
+                        <option value="宋">宋代</option>
+                        <option value="明">明代</option>
                     </select>
                 </div>
                 <div>
