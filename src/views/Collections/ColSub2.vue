@@ -5,52 +5,71 @@ import { message } from 'ant-design-vue';
 import Header from '../../components/Header.vue';
 
 interface Artifact {
-    id: number;
-    image: string;
-    title: string;
+    // id: number;
+    // image: string;
+    name: string;
     description: string;
-    period: string;
+    era: string;
     category: string;
-    isTreasure: boolean;
-    collectionDate: string;
+    storageDate: string;
     quantity: number; // 新增字段
     exhibitionArea: string; // 新增字段
 }
 
-const artifacts = ref<Artifact[]>([]);
+// const artifacts = ref<Artifact[]>([]);
 const newArtifact = ref<Artifact>({
-    id: artifacts.value.length + 1,
-    image: '',
-    title: '',
+    // id: artifacts.value.length + 1,
+    // image: '',
+    name: '',
     description: '',
-    period: '',
+    era: '',
     category: '',
-    isTreasure: false,
-    collectionDate: '',
+    storageDate: '',
     quantity: 1, // 新增字段
     exhibitionArea: '', // 新增字段
 });
 
 const uploadArtifact = () => {
-    if (!newArtifact.value.image || !newArtifact.value.title || !newArtifact.value.description || !newArtifact.value.period || !newArtifact.value.category || !newArtifact.value.collectionDate || !newArtifact.value.quantity || !newArtifact.value.exhibitionArea) {
+    // !newArtifact.value.image ||
+    if ( !newArtifact.value.name || !newArtifact.value.description || !newArtifact.value.era || !newArtifact.value.category || !newArtifact.value.storageDate || !newArtifact.value.quantity || !newArtifact.value.exhibitionArea) {
         message.error('请填写所有字段');
         return;
     }
-    console.log('上传的文物信息:', newArtifact.value); // 打印上传的信息
-    artifacts.value.push({ ...newArtifact.value });
-    newArtifact.value = {
-        id: artifacts.value.length + 1,
-        image: '', // 重置图片字段
-        title: '',
-        description: '',
-        period: '',
-        category: '',
-        isTreasure: false,
-        collectionDate: '',
-        quantity: 1, // 新增字段
-        exhibitionArea: '', // 新增字段
-    };
-    message.success('上传成功，请前往藏品分类页面查看');
+
+    // 调用后端接口上传数据
+    fetch('/api/cols', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newArtifact.value),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('上传失败');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('上传成功:', data);
+        message.success('上传成功，请前往藏品分类页面查看');
+        // 清空表单
+        newArtifact.value = {
+            // id: artifacts.value.length + 1,
+            image: '',
+            name: '',
+            description: '',
+            era: '',
+            category: '',
+            storageDate: '',
+            quantity: 1,
+            exhibitionArea: '',
+        };
+    })
+    .catch(error => {
+        console.error('上传失败:', error);
+        message.error('上传失败，请稍后重试');
+    });
 };
 
 const handleFileChange = (event: Event) => {
@@ -79,36 +98,45 @@ const handleFileChange = (event: Event) => {
                     <input type="file" id="image" @change="handleFileChange" accept="image/*" />
                 </div>
                 <div>
-                    <label for="title">名称:</label>
-                    <input type="text" id="title" v-model="newArtifact.title" required />
+                    <label for="name">名称:</label>
+                    <input type="text" id="name" v-model="newArtifact.name" required />
                 </div>
                 <div>
-                    <label for="description">描述:</label>
-                    <textarea id="description" v-model="newArtifact.description" required></textarea>
-                </div>
-                <div>
-                    <label for="period">时期朝代:</label>
-                    <input type="text" id="period" v-model="newArtifact.period" required />
+                    <label for="era">时期朝代:</label>
+                    <select id="era" v-model="newArtifact.era" required>
+                        <option value="汉">汉</option>
+                        <option value="唐">唐</option>
+                        <option value="宋">宋</option>
+                        <option value="明">明</option>
+                    </select>
                 </div>
                 <div>
                     <label for="category">品类:</label>
-                    <input type="text" id="category" v-model="newArtifact.category" required />
-                </div>
-                <div>
-                    <label for="isTreasure">是否镇馆之宝:</label>
-                    <input type="checkbox" id="isTreasure" v-model="newArtifact.isTreasure" />
-                </div>
-                <div>
-                    <label for="collectionDate">收藏时间:</label>
-                    <input type="date" id="collectionDate" v-model="newArtifact.collectionDate" required />
+                    <select id="category" v-model="newArtifact.category" required>
+                        <option value="工艺品">工艺品</option>
+                        <option value="武器">武器</option>
+                        <option value="陪葬品">陪葬品</option>
+                        <option value="礼器">礼器</option>
+                    </select>
                 </div>
                 <div>
                     <label for="quantity">藏品数量:</label>
                     <input type="number" id="quantity" v-model="newArtifact.quantity" required min="1" /> <!-- 新增字段 -->
                 </div>
                 <div>
+                    <label for="storageDate">入库时间:</label>
+                    <input type="date" id="storageDate" v-model="newArtifact.storageDate" required />
+                </div>
+                <div>
                     <label for="exhibitionArea">展览区域:</label>
-                    <input type="text" id="exhibitionArea" v-model="newArtifact.exhibitionArea" required /> <!-- 新增字段 -->
+                    <select id="exhibitionArea" v-model="newArtifact.exhibitionArea" required>
+                        <option value="展区一">展区一</option>
+                        <option value="展区二">展区二</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="description">描述:</label>
+                    <textarea id="description" v-model="newArtifact.description" required></textarea>
                 </div>
                 <button type="submit">上传</button>
             </form>
@@ -143,7 +171,7 @@ form {
             margin-bottom: 5px;
         }
 
-        input, textarea {
+        input, textarea, select {
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
