@@ -21,12 +21,12 @@ const routes: Array<any> = [
     // component: () => import("../views/Collections.vue"),
     meta: { requiresAuth: true },
     children: [
-      {
-        path: "sub1",
-        name: "collectionsSub1",
-        component: () => import("../views/Collections/ColSub1.vue"),
-        meta: { requiresAuth: true },
-      },
+      // {
+      //   path: "sub1",
+      //   name: "collectionsSub1",
+      //   component: () => import("../views/Collections/ColSub1.vue"),
+      //   meta: { requiresAuth: true },
+      // },
       {
         path: "sub2",
         name: "collectionsSub2",

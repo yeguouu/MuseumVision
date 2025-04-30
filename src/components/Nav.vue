@@ -19,11 +19,11 @@ const items = [
         key: '2',
         label: '藏品管理',
         children: [
-            {
-                key: '2-1',
-                label: '藏品分类',
-                onClick: () => navigateTo('/collections/sub1'),
-            },
+            // {
+            //     key: '2-1',
+            //     label: '藏品分类',
+            //     onClick: () => navigateTo('/collections/sub1'),
+            // },
             {
                 key: '2-2',
                 label: '藏品录入',
@@ -31,7 +31,7 @@ const items = [
             },
             {
                 key: '2-3',
-                label: '藏品',
+                label: '藏品分类',
                 onClick: () => navigateTo('/collections/sub3'),
             },
         ],

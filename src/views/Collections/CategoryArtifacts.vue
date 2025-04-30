@@ -11,7 +11,7 @@
         <h2>{{ category }} 藏品</h2>
         <div class="items item" v-for="artifact in eraArtifacts" :key="artifact.id" @click="showModal(artifact)">
           <img :src="artifact.image" alt="artifact image" />
-          <p>{{ artifact.title }}</p>
+          <p>{{ artifact.name }}</p>
         </div>
       </div>
       <a-modal v-model:visible="isModalVisible" title="文物信息" :footer="null">
@@ -37,6 +37,7 @@ interface Artifact {
   description: string;
   era: string;
   category: string;
+  name: string;
 }
 
 const route = useRoute();
@@ -122,6 +123,9 @@ const navigateTo = (path: string) => {
     flex-wrap: wrap;
     // gap: 10px;
     margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
     .item {
       width: 300px;
