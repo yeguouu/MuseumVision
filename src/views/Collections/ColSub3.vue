@@ -59,19 +59,6 @@ const categorizeArtifacts = () => {
     };
 };
 
-const showModal = (artifact: Artifact) => {
-    selectedArtifact.value = artifact;
-    isModalVisible.value = true;
-};
-
-const handleOk = () => {
-    isModalVisible.value = false;
-};
-
-const toggleRow = (index: number) => {
-    expandedRows.value[index] = !expandedRows.value[index];
-};
-
 // 修改: 确保在点击功能分类时导航到正确的路由
 const navigateToCategory = (category: string) => {
     router.push({ name: 'categoryArtifacts', params: { category } });
@@ -80,10 +67,6 @@ const navigateToCategory = (category: string) => {
 // 新增: 导航到年代分类的路由
 const navigateToEra = (era: string) => {
     router.push({ name: 'eraArtifacts', params: { era } });
-};
-
-const showArtifactsForCategory = () => {
-    showArtifacts.value = true; // 新增：显示文物信息
 };
 </script>
 <template>
@@ -97,14 +80,18 @@ const showArtifactsForCategory = () => {
                 <h2>年代分类</h2>
                 <div class="items">
                     <div class="item-box" v-for="(era, index) in Object.keys(eraCategories)" :key="index" @click="navigateToEra(era)">
+                        <img :src="Col1" alt="era image" />
+                        <div class="middle"></div>
                         <p>{{ era }}</p>
                     </div>
                 </div>
             </div>
             <div class="section">
-                <h2>功能分类</h2>
+                <h2>品类分类</h2>
                 <div class="items">
                     <div class="item-box" v-for="(category, index) in Object.keys(categoryCategories)" :key="index" @click="navigateToCategory(category)">
+                        <img :src="Col1" alt="era image" />
+                        <div class="middle"></div>
                         <p>{{ category }}</p>
                     </div>
                 </div>
@@ -144,7 +131,7 @@ const showArtifactsForCategory = () => {
         flex-wrap: wrap;
         justify-content: flex-start;
         gap: 20px;
-
+        margin-left: 100px;
         .item-box {
             width: 250px;
             height: 250px;
@@ -158,9 +145,25 @@ const showArtifactsForCategory = () => {
             border-radius: 5px;
             transition: box-shadow 0.3s ease;
 
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                // border-radius: 5px;
+            }
+            .middle{
+                position: absolute;
+                width: 250px;
+                height: 250px;
+                background-color: rgba(96, 93, 93, 0.5);
+                z-index: 1;
+            }
             p {
                 text-align: center;
                 margin: 0;
+                position: absolute;
+                z-index: 2;
+                font-size: 25px;
             }
 
             &:hover {
