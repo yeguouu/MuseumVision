@@ -5,7 +5,7 @@ import { message } from 'ant-design-vue';
 import Header from '../../components/Header.vue';
 
 interface Artifact {
-    id: number;
+    _id: number;
     name: string;
     era: string;
     category: string;
@@ -25,6 +25,9 @@ const borrowInfo = ref({
     borrowDate: '',
     duration: '',
 });
+
+const isReturnModalVisible = ref(false);
+const selectedReturnArea = ref('');
 
 onMounted(() => {
     fetch('/api/cols', {
@@ -58,9 +61,37 @@ const confirmBorrow = () => {
 
     // 更新文物的展览区域为“出借中”
     if (selectedArtifact.value) {
-        selectedArtifact.value.exhibitionArea = '出借中';
-        message.success('出借成功，展览区域已更新为“出借中”');
-        isModalVisible.value = false;
+        console.log('选择的值',selectedArtifact.value);
+        console.log('id',selectedArtifact.value._id);
+        // 修改：简化请求体，只更新展览区域
+        fetch('/api/cols/borrow', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                // 一定要注意数据是否符合要求
+                id: selectedArtifact.value._id,
+                exhibitionArea: '出借中',
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.error('上传失败:', Error);
+                throw new Error('出借失败');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('出借成功:', data);
+            selectedArtifact.value.exhibitionArea = '出借中';
+            message.success('出借成功，展览区域已更新为“出借中”');
+            isModalVisible.value = false;
+        })
+        .catch(error => {
+            console.error('出借失败:', error);
+            message.error('出借失败，请稍后重试');
+        });
     }
 };
 
@@ -73,6 +104,54 @@ const closeModal = () => {
         borrowDate: '',
         duration: '',
     };
+};
+
+const handleReturn = (artifact: Artifact) => {
+    selectedArtifact.value = artifact;
+    isReturnModalVisible.value = true;
+};
+
+const confirmReturn = () => {
+    if (!selectedReturnArea.value) {
+        message.error('请选择展览区域');
+        return;
+    }
+
+    if (selectedArtifact.value) {
+        // 修改：简化请求体，只更新展览区域
+        fetch('/api/cols/borrow', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: selectedArtifact.value._id,
+                exhibitionArea: selectedReturnArea.value,
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('归还失败');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('归还成功:', data);
+            selectedArtifact.value.exhibitionArea = selectedReturnArea.value;
+            message.success('归还成功，展览区域已更新');
+            isReturnModalVisible.value = false;
+            selectedReturnArea.value = '';
+        })
+        .catch(error => {
+            console.error('归还失败:', error);
+            message.error('归还失败，请稍后重试');
+        });
+    }
+};
+
+const closeReturnModal = () => {
+    isReturnModalVisible.value = false;
+    selectedReturnArea.value = '';
 };
 </script>
 
@@ -108,6 +187,7 @@ const closeModal = () => {
                         <td>{{ artifact.description }}</td>
                         <td>
                             <button @click="handleBorrow(artifact)">出借</button>
+                            <button @click="handleReturn(artifact)" style="margin-left: 10px;">归还</button>
                         </td>
                     </tr>
                 </tbody>
@@ -151,6 +231,22 @@ const closeModal = () => {
                 </div>
                 <template #footer>
                     <button @click="confirmBorrow">确认出借</button>
+                </template>
+            </a-modal>
+            <a-modal v-model:visible="isReturnModalVisible" title="归还文物" @cancel="closeReturnModal">
+                <div class="form-container">
+                    <div class="form-item">
+                        <label for="returnArea">展览区域:</label>
+                        <select id="returnArea" v-model="selectedReturnArea" required>
+                            <option value="">请选择</option>
+                            <option value="展区一">展区一</option>
+                            <option value="展区二">展区二</option>
+                            <option value="修复中">修复中</option>
+                        </select>
+                    </div>
+                </div>
+                <template #footer>
+                    <button @click="confirmReturn">确认归还</button>
                 </template>
             </a-modal>
         </div>
