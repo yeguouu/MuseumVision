@@ -1,37 +1,45 @@
 <script lang='ts' setup>
 import Nav from '../../components/Nav.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { message } from 'ant-design-vue';
 import Header from '../../components/Header.vue';
 
 // 定义人员数据结构
 interface Person {
-    id: number;
-    name: string;
+    _id: number;
+    username: string;
     role: string;
     createdAt: string;
 }
 
-// 假数据
-const persons = ref<Person[]>([
-    { id: 1, name: '张三', role: '超级管理员', createdAt: '2023-01-01' },
-    { id: 2, name: '李四', role: '区域管理员', createdAt: '2023-02-01' },
-    { id: 3, name: '王五', role: '普通管理员', createdAt: '2023-03-01' },
-    { id: 4, name: '赵六', role: '超级管理员', createdAt: '2023-04-01' },
-    { id: 5, name: '孙七', role: '区域管理员', createdAt: '2023-05-01' },
-    { id: 6, name: '周八', role: '普通管理员', createdAt: '2023-06-01' },
-]);
+// 从后端接口获取人员数据
+const persons = ref<Person[]>([]);
 
-// 删除人员方法
-const deletePerson = (id: number) => {
-    persons.value = persons.value.filter(person => person.id !== id);
-    message.success('删除成功');
-};
+onMounted(() => {
+    fetch('/api/users')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch users');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 按照返回顺序排列编号
+            persons.value = data.map((person, index) => ({
+                ...person,
+                id: index + 1
+            }));
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            message.error('获取人员数据失败');
+        });
+});
 
 // 分配角色模态框
 const isModalVisible = ref(false);
 const selectedPerson = ref<Person | null>(null);
-const roles = ['超级管理员', '区域管理员', '普通管理员'];
+const roles = ['超级管理员', '研究人员', '普通管理员'];
 
 const showModal = (person: Person) => {
     selectedPerson.value = person;
@@ -40,25 +48,50 @@ const showModal = (person: Person) => {
 
 const handleOk = () => {
     if (selectedPerson.value) {
-        message.success('角色分配成功');
+        // 新增：调用后端接口更新用户角色
+        fetch('/api/users/role', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: selectedPerson.value._id,
+                role: selectedPerson.value.role,
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update user role');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Role updated successfully:', data);
+            message.success('角色分配成功');
+        })
+        .catch(error => {
+            console.error('Error updating user role:', error);
+            message.error('角色分配失败，请稍后重试');
+        });
     }
     isModalVisible.value = false;
 };
 
-const assignRole = (role: string) => {
-    if (selectedPerson.value) {
-        selectedPerson.value.role = role;
-        handleOk();
-    }
-};
-
 // 定义表格列
 const columns = [
-    { title: '编号', dataIndex: 'id', key: 'id' },
-    { title: '姓名', dataIndex: 'name', key: 'name' },
+    { 
+        title: '编号', 
+        key: 'index',
+        customRender: ({ index }) => index + 1 
+    },
+    { title: '账号', dataIndex: 'username', key: 'username' },
     { title: '角色', dataIndex: 'role', key: 'role' },
     { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt' },
-    { title: '操作', key: 'action', slots: { customRender: 'action' } },
+    { 
+        title: '操作', 
+        key: 'action', 
+        slots: { customRender: 'action' } 
+    },
 ];
 </script>
 <template>
@@ -70,7 +103,6 @@ const columns = [
         <div class="content-container">
             <a-table :columns="columns" :data-source="persons" row-key="id">
                 <template #action="{ record }">
-                    <a-button type="link" @click="deletePerson(record.id)">删除</a-button>
                     <a-button type="link" @click="showModal(record)">分配角色</a-button>
                 </template>
             </a-table>
