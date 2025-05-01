@@ -12,7 +12,7 @@
 .header {
   width: 100vw;
   height: 100px;
-  background-color: #333;
+  background: linear-gradient(135deg, #071f53, #0d0b83);
   color: white;
   text-align: left;
   display: flex;

@@ -100,5 +100,9 @@ watch(
 <style lang='scss' scoped>
 .sidebar {
     width: 15%;
+    height: 100%;
+    background: linear-gradient(135deg, #070c53, #0d0b83);
+    opacity: 0.95;
+    color: #fff;
 }
 </style>

@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 import Nav from '../../components/Nav.vue';
-import { ref, onMounted } from 'vue';
+import { ref, computed ,onMounted} from 'vue';
 import { message } from 'ant-design-vue';
 import Header from '../../components/Header.vue';
 
@@ -16,6 +16,28 @@ interface Artifact {
 }
 
 const artifacts = ref<Artifact[]>([]);
+const currentPage = ref(1); // 当前页码
+const pageSizeOptions = ref(['5', '10', '15']); // 新增每页显示条数选项
+const pageSize = ref(10); // 默认每页显示10条
+
+// 计算分页后的数据
+const paginatedArtifacts = computed(() => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    const end = start + pageSize.value;
+    return artifacts.value.slice(start, end);
+});
+
+// 分页切换事件
+const handlePageChange = (page: number) => {
+    currentPage.value = page;
+};
+
+// 处理每页显示条数变化
+const handlePageSizeChange = (current: number, size: number) => {
+    pageSize.value = size;
+    currentPage.value = 1; // 切换每页条数时重置到第一页
+};
+
 const isModalVisible = ref(false);
 const selectedArtifact = ref<Artifact | null>(null);
 const borrowInfo = ref({
@@ -177,7 +199,7 @@ const closeReturnModal = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="artifact in artifacts" :key="artifact.id">
+                    <tr v-for="artifact in paginatedArtifacts" :key="artifact.id">
                         <td>{{ artifact.name }}</td>
                         <td>{{ artifact.era }}</td>
                         <td>{{ artifact.category }}</td>
@@ -192,6 +214,17 @@ const closeReturnModal = () => {
                     </tr>
                 </tbody>
             </table>
+            <!-- 修改：分页组件 -->
+            <a-pagination
+                v-model:current="currentPage"
+                :total="artifacts.length"
+                :page-size="pageSize"
+                :page-size-options="pageSizeOptions"
+                @change="handlePageChange"
+                @showSizeChange="handlePageSizeChange"
+                show-size-changer
+                style="margin-top: 20px; text-align: center;"
+            />
             <a-modal v-model:visible="isModalVisible" title="出借信息" @cancel="closeModal">
                 <div class="form-container">
                     <div class="form-item">
@@ -263,7 +296,7 @@ const closeReturnModal = () => {
 .content-container {
     width: 85%;
     height: 100%;
-    background-color: #f0f0f0;
+    // background-color: #f0f0f0;
     padding: 20px;
 }
 

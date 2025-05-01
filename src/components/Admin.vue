@@ -27,7 +27,7 @@ const outLogin = () => {
     align-items: center;
     padding: 30px;
     font-size: 20px;
-    color: #999;
+    color: #2a2828;
 
     .left {
         margin-left: 20%;
@@ -41,7 +41,7 @@ const outLogin = () => {
         .out {
             margin-top: 30px;
             cursor: pointer;
-            color: #8fd8f2;
+            color: #375dc8;
         }
     }
 }

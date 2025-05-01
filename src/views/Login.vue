@@ -56,7 +56,7 @@ const handleLogin = () => {
 .login_container {
     width: 100vw;
     height: 100vh;
-    background-image: url('../assets/login/bg.png');
+    background-image: url('../assets/login/bg2.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -69,7 +69,7 @@ const handleLogin = () => {
     right: 200px;
     position: absolute;
     z-index: 200;
-    background-color: #fff;
+    background-color: #ffffff28;
     display: flex;
     flex-direction: column;
     align-items: center;
